@@ -32,9 +32,7 @@ gcs_daily_data = f"gs://inceptez-usecase5/custs_{formatted_datetime}"
 custs_gcs = spark.read.csv(gcs_daily_data,sep=",",schema=custs_schema)
 
 # Load data into Bigquery
-(custs_gcs.write
- .mode("append")
- .format("bigquery")
+(custs_gcs.write.mode("append").format("bigquery")
  .option("temporaryGcsBucket",'incpetez-usecase5/tmp')
  .option("table","rawdataset.cust_raw")
  .save())
@@ -42,8 +40,7 @@ custs_gcs = spark.read.csv(gcs_daily_data,sep=",",schema=custs_schema)
 #Transformations:
 custs_gcs.createOrReplaceTempView("custs_view") # Temp view create to write SQL type queries
 transformed_custs_gcs = spark.sql("select profession, round(avg(age),2) as avg_age from custs_view group by profession order by avg_age DESC")
-(transformed_custs_gcs.write
- .mode("append")
+(transformed_custs_gcs.write.mode("append")
  .format("bigquery")
  .option("temporaryGcsBucket",'incpetez-usecase5/tmp')
  .option("table","curatedataset.curated_table")
