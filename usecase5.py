@@ -35,6 +35,7 @@ custs_gcs = spark.read.csv(gcs_daily_data,sep=",",schema=custs_schema)
 (custs_gcs.write.format("bigquery")
  .option("temporaryGcsBucket",'incpetez-usecase5/tmp')
  .option("table","rawdataset.cust_raw")
+ .option("mode","overwrite")
  .save())
 
 #Transformations:
@@ -44,6 +45,7 @@ transformed_custs_gcs = spark.sql("select profession, round(avg(age),2) as avg_a
  .format("bigquery")
  .option("temporaryGcsBucket",'incpetez-usecase5/tmp')
  .option("table","curatedataset.curated_table")
+ .option("mode","overwrite")
  .save())
 
 # Stopping the program
